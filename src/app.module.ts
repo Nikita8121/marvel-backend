@@ -7,6 +7,7 @@ import { getMongoConfig } from './configs/mongo.config';
 import { AuthModule } from './auth/auth.module';
 import { ComicModule } from './comic/comic.module';
 import { CharacterModule } from './character/character.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CharacterModule } from './character/character.module';
     AuthModule,
     ComicModule,
     CharacterModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

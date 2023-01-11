@@ -7,7 +7,7 @@ export class CreateComicDto {
   @IsString()
   thumbnail: string;
 
-  @IsString()
+  @IsNumber()
   price: string;
 
   @IsString()

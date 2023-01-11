@@ -1,7 +1,7 @@
 import { prop } from '@typegoose/typegoose';
 import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
 
-export class IComicItem {
+export class ComicItem {
   @prop()
   resourceURI: string;
   @prop()
@@ -9,11 +9,9 @@ export class IComicItem {
 }
 
 export interface CharacterModel extends Base {}
-
 export class CharacterModel extends TimeStamps {
   @prop({ unique: true })
   name: string;
-
   @prop()
   description: string;
   @prop()
@@ -22,6 +20,6 @@ export class CharacterModel extends TimeStamps {
   homepage: string;
   @prop()
   wiki: string;
-  @prop({ type: () => [IComicItem] })
-  comics: IComicItem[];
+  @prop({ type: () => [ComicItem] })
+  comics: ComicItem[];
 }

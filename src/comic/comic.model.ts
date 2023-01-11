@@ -13,7 +13,7 @@ export class ComicModel extends TimeStamps {
   thumbnail: string;
 
   @prop()
-  price: string;
+  price: number;
 
   @prop()
   description: string;
