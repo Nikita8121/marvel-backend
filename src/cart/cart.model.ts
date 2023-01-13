@@ -12,7 +12,7 @@ export class Item {
 
 export interface CartModel extends Base {}
 export class CartModel extends TimeStamps {
-  @prop({ type: () => [Item] })
+  @prop({ type: () => [Item], _id: false })
   items: Item[];
   @prop({ unique: true })
   userId: string;

@@ -8,7 +8,8 @@ export class MongoFilter implements ExceptionFilter {
     host: ArgumentsHost,
   ) {
     const response = host.switchToHttp().getResponse();
-    const messages = Object.keys(exception.keyPattern).map((key) => {
+    console.log(exception);
+    const messages = Object.keys(exception.keyPattern)?.map((key) => {
       return `The ${key} with value "${exception.keyValue[key]}" already exists`;
     });
     if (exception.code === 11000) {
