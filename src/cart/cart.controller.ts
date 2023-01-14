@@ -4,12 +4,16 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
+  Get,
+  Param,
+  Req,
+  UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { CartService } from './cart.service';
-import { Get, Param, UseGuards } from '@nestjs/common/decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { Delete } from '@nestjs/common';
+import { Request } from 'express';
 
 @Controller('cart')
 export class CartController {
@@ -23,9 +27,9 @@ export class CartController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async get(@Param('id') id: string) {
-    return this.cartService.get(id);
+  @Get('')
+  async get(@Req() req: Request) {
+    return this.cartService.get(req.headers?.authorization);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,7 +1,7 @@
 import { prop } from '@typegoose/typegoose';
 import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
 
-export class Item {
+export class CartItem {
   @prop()
   comicId: string;
   @prop()
@@ -12,8 +12,8 @@ export class Item {
 
 export interface CartModel extends Base {}
 export class CartModel extends TimeStamps {
-  @prop({ type: () => [Item], _id: false })
-  items: Item[];
+  @prop({ type: () => [CartItem], _id: false })
+  items: CartItem[];
   @prop({ unique: true })
   userId: string;
   @prop()

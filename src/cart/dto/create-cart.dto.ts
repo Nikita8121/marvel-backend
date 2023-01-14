@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 export class ItemDto {
   @IsString()
@@ -11,6 +11,8 @@ export class ItemDto {
 }
 
 export class CreateCartDto {
+  @IsArray()
+  @ValidateNested()
   @Type(() => ItemDto)
   items: ItemDto[];
   @IsString()

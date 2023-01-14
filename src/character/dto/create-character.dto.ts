@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsArray, IsString, ValidateNested } from 'class-validator';
 
 export class ComicItemDto {
   resourceURI: string;
@@ -17,6 +17,8 @@ export class CreateCharacterDto {
   homepage: string;
   @IsString()
   wiki: string;
+  @IsArray()
+  @ValidateNested()
   @Type(() => ComicItemDto)
   comics: ComicItemDto[];
 }

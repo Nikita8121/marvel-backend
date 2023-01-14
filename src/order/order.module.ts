@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
-import { CartService } from './cart.service';
-import { CartController } from './cart.controller';
+import { OrderController } from './order.controller';
+import { OrderService } from './order.service';
 import { TypegooseModule } from 'nestjs-typegoose';
-import { CartModel } from './cart.model';
 import { JwtHelperModule } from 'src/utils/jwtHelper/jwthelper.module';
+import { OrderModel } from './order.model';
 
 @Module({
   imports: [
     JwtHelperModule,
     TypegooseModule.forFeature([
       {
-        typegooseClass: CartModel,
+        typegooseClass: OrderModel,
         schemaOptions: {
-          collection: 'Cart',
+          collection: 'Order',
         },
       },
     ]),
   ],
-  providers: [CartService],
-  controllers: [CartController],
+  controllers: [OrderController],
+  providers: [OrderService],
 })
-export class CartModule {}
+export class OrderModule {}

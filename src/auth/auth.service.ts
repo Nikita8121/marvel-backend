@@ -38,12 +38,20 @@ export class AuthService {
     return { email: user.email };
   }
 
+  async getByToken(jwt: string) {
+    const payload = this.jwtService.decode(jwt.replace('Bearer ', '')) as {
+      email: string;
+    };
+    return this.findUser(payload.email);
+  }
+
   async findUser(email: string) {
     return this.userModel.findOne({ email }).exec();
   }
 
   async login(email: string) {
-    const payload = { email };
+    const user = await this.findUser(email);
+    const payload = { userId: user._id, email: user.email };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

@@ -1,3 +1,4 @@
+import { JwtHelperModule } from './utils/jwtHelper/jwthelper.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,9 +9,11 @@ import { AuthModule } from './auth/auth.module';
 import { ComicModule } from './comic/comic.module';
 import { CharacterModule } from './character/character.module';
 import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
+    JwtHelperModule,
     ConfigModule.forRoot(),
     TypegooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -21,6 +24,7 @@ import { CartModule } from './cart/cart.module';
     ComicModule,
     CharacterModule,
     CartModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

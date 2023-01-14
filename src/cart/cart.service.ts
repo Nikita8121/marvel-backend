@@ -3,23 +3,26 @@ import { CreateCartDto } from './dto/create-cart.dto';
 import { CartModel } from './cart.model';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
-import { Types } from 'mongoose';
+import { JwtHelperService } from 'src/utils/jwtHelper/jwthelper.service';
+import { GetCartDTO } from './dto/get-cart.dto';
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectModel(CartModel) private readonly cartModel: ModelType<CartModel>,
+    private readonly jwtHelperService: JwtHelperService,
   ) {}
 
   async create(dto: CreateCartDto) {
     return new this.cartModel(dto).save();
   }
 
-  async get(id: string) {
+  async get(jwt: string): Promise<GetCartDTO> {
+    const jwtPayload = await this.jwtHelperService.getJwtPayload(jwt);
     return this.cartModel
       .aggregate([
         {
-          $match: { _id: new Types.ObjectId(id) },
+          $match: { userId: jwtPayload.userId },
         },
         {
           $sort: {
@@ -30,42 +33,6 @@ export class CartService {
           $limit: 1,
         },
         { $unwind: '$items' },
-        /* {
-          $lookup: {
-            from: 'User',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'comics',
-          },
-        }, */
-        /* {
-          $addFields: {
-            comics: { $push: '$comics' },
-          },
-        }, */
-        /* {
-          $unwind: '$comics',
-          preserveNullAndEmptyArrays: true, 
-        }, */
-        /* {
-          $lookup: {
-            from: 'Comic',
-            pipeline: [
-              { */
-        /* $match: { _id: new Types.ObjectId('63bd5e66cf4bc52a5a30ab41') }, */
-        /*    $match: {
-                  $expr: {
-                    $map: {
-                      input: 'items',
-                      
-                    }
-                  }
-                }
-              },
-            ],
-            as: 'comics',
-          },
-        }, */
         {
           $lookup: {
             from: 'Comic',
@@ -77,29 +44,22 @@ export class CartService {
               {
                 $match: { $expr: { $eq: ['$_id', '$$comicId'] } },
               },
-              {
-                $replaceRoot: {
-                  newRoot: { $mergeObjects: ['$$items', '$$ROOT'] },
-                },
-              },
             ],
-            as: 'comics',
+            as: 'items.item',
           },
         },
+        { $unwind: '$items.item' },
         {
           $group: {
             _id: '$_id',
-            /*  items: { $push: '$items' }, */
-            comics: { $push: '$comics' },
+            userId: { $first: '$userId' },
+            totalPrice: { $first: '$totalPrice' },
+            items: { $push: '$items' },
           },
         },
-        /* {
-          $addFields: {
-            comics: '$comics',
-          },
-        }, */
       ])
-      .exec();
+      .exec()
+      .then((items) => items[0]);
   }
 
   async delete(id: string) {

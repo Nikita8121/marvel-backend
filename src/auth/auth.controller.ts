@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -12,8 +14,9 @@ import { RegisterDto } from './dto/register.dto';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { ALREADY_REGISTERED_ERROR } from './auth.constants';
-import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './guards/local.guard';
+import { Request } from 'express';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +30,12 @@ export class AuthController {
       throw new BadRequestException(ALREADY_REGISTERED_ERROR);
     }
     return this.authService.createUser(dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async getUser(@Req() req: Request) {
+    return this.authService.getByToken(req.headers.authorization);
   }
 
   @UsePipes(new ValidationPipe())
