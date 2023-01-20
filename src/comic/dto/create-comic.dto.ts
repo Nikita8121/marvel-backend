@@ -5,13 +5,13 @@ export class CreateComicDto {
   title: string;
 
   @IsString()
+  description: string;
+
+  @IsString()
   thumbnail: string;
 
   @IsNumber()
   price: string;
-
-  @IsString()
-  description: string;
 
   @IsNumber()
   pageCount: number;

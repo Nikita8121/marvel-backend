@@ -20,6 +20,6 @@ export class CharacterModel extends TimeStamps {
   homepage: string;
   @prop()
   wiki: string;
-  @prop({ type: () => [ComicItem] })
+  @prop({ type: () => [ComicItem], _id: false })
   comics: ComicItem[];
 }

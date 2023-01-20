@@ -13,4 +13,32 @@ export class ComicService {
     const newComic = new this.comicModel(dto);
     return newComic.save();
   }
+
+  async get(offsetParam: string, limitParam: string) {
+    const total = await this.comicModel.count().exec();
+    const limit = limitParam ? parseInt(limitParam) : 9;
+    const offset = offsetParam ? parseInt(offsetParam) : 0;
+    return {
+      total,
+      offset,
+      limit,
+      results: await this.comicModel.aggregate([
+        {
+          $sort: {
+            _id: 1,
+          },
+        },
+        {
+          $skip: offset,
+        },
+        {
+          $limit: limit,
+        },
+      ]),
+    };
+  }
+
+  async getById(id: string) {
+    return this.comicModel.findById(id);
+  }
 }

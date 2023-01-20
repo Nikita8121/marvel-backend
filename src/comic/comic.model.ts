@@ -6,7 +6,7 @@ export interface ComicModel extends Base {}
 
 @Injectable()
 export class ComicModel extends TimeStamps {
-  @prop({ unique: true })
+  @prop()
   title: string;
 
   @prop()

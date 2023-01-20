@@ -25,7 +25,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('register')
   async register(@Body() dto: RegisterDto) {
-    const oldUser = await this.authService.findUser(dto.login);
+    const oldUser = await this.authService.findUser(dto.email);
     if (oldUser) {
       throw new BadRequestException(ALREADY_REGISTERED_ERROR);
     }
@@ -42,7 +42,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(200)
   @Post('login')
-  async login(@Body() { login }: AuthDto) {
-    return this.authService.login(login);
+  async login(@Body() { email }: AuthDto) {
+    return this.authService.login(email);
   }
 }
