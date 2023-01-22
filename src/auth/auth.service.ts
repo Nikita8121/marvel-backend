@@ -20,7 +20,7 @@ export class AuthService {
       passwordHash: await hash(dto.password, salt),
     });
     await newUser.save();
-    return newUser.delete;
+    return { email: newUser.email };
   }
 
   async validateUser(
