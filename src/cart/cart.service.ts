@@ -1,5 +1,5 @@
 import { Delete, Get, Injectable, Put } from '@nestjs/common';
-import { CreateCartDto } from './dto/create-cart.dto';
+import { AddItemDto } from './dto/add-item.dto';
 import { CartModel } from './cart.model';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
@@ -13,16 +13,16 @@ export class CartService {
     private readonly jwtHelperService: JwtHelperService,
   ) {}
 
-  async create(dto: CreateCartDto) {
+  async add(dto: AddItemDto, userId: string) {
+    (dto as AddItemDto & { userId: string }).userId = userId;
     return new this.cartModel(dto).save();
   }
 
-  async get(jwt: string): Promise<GetCartDTO> {
-    const jwtPayload = await this.jwtHelperService.getJwtPayload(jwt);
+  async get(userId: string): Promise<GetCartDTO> {
     return this.cartModel
       .aggregate([
         {
-          $match: { userId: jwtPayload.userId },
+          $match: { userId: userId },
         },
         {
           $sort: {

@@ -1,5 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 export enum Payment {
   Cash,
@@ -30,5 +36,6 @@ export class CreateOrderDto {
   @ValidateNested()
   @Type(() => ItemDto)
   items: ItemDto[];
+  @IsNumber()
   totalPrice: number;
 }

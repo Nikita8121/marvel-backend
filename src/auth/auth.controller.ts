@@ -4,8 +4,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  Headers,
   Post,
-  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -15,8 +15,8 @@ import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { ALREADY_REGISTERED_ERROR } from './auth.constants';
 import { LocalAuthGuard } from './guards/local.guard';
-import { Request } from 'express';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { UserId } from 'src/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -34,8 +34,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async getUser(@Req() req: Request) {
-    return this.authService.getByToken(req.headers.authorization);
+  async getUser(@UserId() userId: string) {
+    return this.authService.getById(userId);
   }
 
   @UsePipes(new ValidationPipe())

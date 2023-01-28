@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcryptjs';
 import { RegisterDto } from './dto/register.dto';
 import { USER_NOT_FOUND, WRONG_PASSWORD_ERROR } from './auth.constants';
+import { UserId } from '../decorators/user.decorator';
 
 @Injectable()
 export class AuthService {
@@ -27,23 +28,22 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<Pick<UserModel, 'email'>> {
-    const user = await this.findUser(email);
+    const user = (await this.findUser(email)).toObject();
     if (!user) {
       throw new UnauthorizedException(USER_NOT_FOUND);
     }
-    const isCorrectPassword = await compare(password, user.passwordHash);
+    const isCorrectPassword = compare(password, user.passwordHash);
     if (!isCorrectPassword) {
       throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
     }
-
-    return { email: user.email };
+    delete user.passwordHash;
+    return user;
   }
 
-  async getByToken(jwt: string) {
-    const payload = this.jwtService.decode(jwt.replace('Bearer ', '')) as {
-      email: string;
-    };
-    return this.findUser(payload.email);
+  async getById(id: string) {
+    const user = (await this.userModel.findById(id).exec()).toObject();
+    delete user.passwordHash;
+    return user;
   }
 
   async findUser(email: string) {

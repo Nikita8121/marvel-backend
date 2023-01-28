@@ -23,6 +23,7 @@ export class JwtHelperService {
       await this.jwtService.verifyAsync(token);
       return this.jwtService.decode(this.getToken(authHeader)) as PayloadType;
     } catch (e) {
+      console.log(e);
       return null;
     }
   }

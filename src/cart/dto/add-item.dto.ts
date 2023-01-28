@@ -10,14 +10,8 @@ export class ItemDto {
   price: number;
 }
 
-export class CreateCartDto {
-  @IsArray()
+export class AddItemDto {
   @ValidateNested()
   @Type(() => ItemDto)
-  items: ItemDto[];
-  @IsString()
-  userId: string;
-  @IsNumber()
-  totalPrice: number;
+  item: ItemDto;
 }
-

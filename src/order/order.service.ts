@@ -12,11 +12,9 @@ export class OrderService {
     private readonly jwtHelperService: JwtHelperService,
   ) {}
 
-  async create(dto: CreateOrderDto, authHeader: string) {
+  async create(dto: CreateOrderDto, userId: string) {
     const newOrder = new this.orderModel(dto).save();
-    console.log(await this.jwtHelperService.getJwtPayload(authHeader))
-    if (authHeader) {
-      const jwtPayload = await this.jwtHelperService.getJwtPayload(authHeader);
+    if (userId) {
     }
     return newOrder;
   }

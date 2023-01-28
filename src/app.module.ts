@@ -10,6 +10,7 @@ import { ComicModule } from './comic/comic.module';
 import { CharacterModule } from './character/character.module';
 import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { OrderModule } from './order/order.module';
     CharacterModule,
     CartModule,
     OrderModule,
+    FavoriteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
