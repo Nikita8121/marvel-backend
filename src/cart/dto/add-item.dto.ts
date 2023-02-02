@@ -1,17 +1,8 @@
-import { Type } from 'class-transformer';
-import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
-export class ItemDto {
+export class AddItemDto {
   @IsString()
   comicId: string;
   @IsNumber()
-  quantity: number;
-  @IsNumber()
   price: number;
-}
-
-export class AddItemDto {
-  @ValidateNested()
-  @Type(() => ItemDto)
-  item: ItemDto;
 }

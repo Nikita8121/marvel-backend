@@ -7,9 +7,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export enum Payment {
-  Cash,
-  CreditCard,
+enum Payment {
+  Cash = 'Cash',
+  CreditCard = 'CreditCard',
 }
 
 class ItemDto {

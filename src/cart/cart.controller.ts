@@ -5,17 +5,14 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
-  Param,
-  Req,
-  Headers,
   UseGuards,
   Delete,
 } from '@nestjs/common';
 import { AddItemDto } from './dto/add-item.dto';
 import { CartService } from './cart.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { Request } from 'express';
 import { UserId } from 'src/decorators/user.decorator';
+import { RemoveItemDto } from './dto/remove-item.dto';
 
 @Controller('cart')
 export class CartController {
@@ -23,9 +20,16 @@ export class CartController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
-  @Post('add')
-  async add(@Body() dto: AddItemDto, @UserId() userId: string) {
-    return this.cartService.add(dto, userId);
+  @Post('')
+  async addItem(@Body() dto: AddItemDto, @UserId() userId: string) {
+    return this.cartService.addItem(dto, userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  @Delete('removeItem')
+  async removeItem(@Body() dto: RemoveItemDto, @UserId() userId: string) {
+    return this.cartService.removeItem(dto.comicId, userId);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -35,8 +39,8 @@ export class CartController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return this.cartService.delete(id);
+  @Delete('')
+  async delete(@UserId() userId: string) {
+    return this.cartService.delete(userId);
   }
 }

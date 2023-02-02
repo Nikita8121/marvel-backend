@@ -4,6 +4,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { OrderModel } from './order.model';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { JwtHelperService } from 'src/utils/jwtHelper/jwthelper.service';
+import { HttpException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class OrderService {
@@ -12,10 +13,17 @@ export class OrderService {
     private readonly jwtHelperService: JwtHelperService,
   ) {}
 
-  async create(dto: CreateOrderDto, userId: string) {
-    const newOrder = new this.orderModel(dto).save();
-    if (userId) {
+  async create(dto: CreateOrderDto, authorizationHeader: string) {
+    if (authorizationHeader) {
+      const payload = await this.jwtHelperService.getJwtPayload(
+        authorizationHeader,
+      );
+      if (payload?.userId) {
+        return new this.orderModel({ ...dto, userId: payload.userId }).save();
+      } else {
+        throw new HttpException('Unauthorized', 401);
+      }
     }
-    return newOrder;
+    return new this.orderModel(dto).save();
   }
 }

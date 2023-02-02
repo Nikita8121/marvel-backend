@@ -2,9 +2,9 @@ import { Prop } from '@typegoose/typegoose';
 import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
 import { Injectable } from '@nestjs/common';
 
-export enum Payment {
-  Cash,
-  CreditCard,
+enum Payment {
+  Cash = 'Cash',
+  CreditCard = 'CreditCard',
 }
 
 class Item {
@@ -34,4 +34,6 @@ export class OrderModel extends TimeStamps {
   items: Item[];
   @Prop()
   totalPrice: number;
+  @Prop({ required: false })
+  userId: string;
 }

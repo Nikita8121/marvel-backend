@@ -17,7 +17,6 @@ export class CharacterController {
   @UsePipes(new ValidationPipe())
   @Post('create')
   async create(@Body() dto: CreateCharacterDto) {
-    console.log(dto);
     return this.characterService.create(dto);
   }
 

@@ -14,8 +14,6 @@ export class MongoFilter implements ExceptionFilter {
     });
     if (exception.code === 11000) {
       response.status(409).json({ message: messages.join('/n') });
-    } else {
-      response.status(500).json({ message: 'Internal error.' });
     }
   }
 }
